@@ -13,17 +13,17 @@ class test_DiveraMessageConverter(unittest.TestCase):
         expected_first_id = 123
         expected_first_name = "Neue Dienstanweisung"
         expected_first_date = None
-        expected_first_answers = { }
+        expected_first_answers = [ ]
         expected_first_number_of_answers = 0
         expected_second_id = 123
         expected_second_name = "Neue Dienstanweisung"
         expected_second_date = date(2095, 6, 3)
-        expected_second_answers = { }
+        expected_second_answers = [ ]
         expected_second_number_of_answers = 0
         expected_third_id = 123
         expected_third_name = "Neue Dienstanweisung"
         expected_third_date = date(2020, 7, 23)
-        expected_third_answers = { }
+        expected_third_answers = [ ]
         expected_third_number_of_answers = 0
 
         actual = DiveraMessageConverter().divera_news_response_to_news(input_json)

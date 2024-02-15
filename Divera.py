@@ -1,6 +1,7 @@
 import json
 import requests
 from datetime import date, datetime, timedelta
+from dataclasses import dataclass
 
 class DiveraApiClient:
     """
@@ -102,14 +103,11 @@ class DiveraMessageConverter:
         return result
 
     def _divera_answers_to_dict(self, diveraAnswers: dict) -> dict:
-        result = { }
+        result = []
         answers = list(diveraAnswers["answers"].values())
 
         for answer in answers:
-            title = answer["title"]
-            count = answer["answeredcount"]
-            result[title] = count
-
+            result.append(Answer(id=answer["id"], name=answer["title"], count=answer["answeredcount"]))
         return result
 
     def _answer_title_to_date(self, title: str) -> date:
@@ -124,6 +122,12 @@ class DiveraMessageConverter:
     def _split_date_and_title(self, title: str) -> tuple:
         return (title[:10], title[11:])
 
+@dataclass
+class Answer:
+    id: int
+    name: str
+    count: int
+
 
 class News:
     id = -1
@@ -132,16 +136,15 @@ class News:
     answers = { }
     sum_answers = 0
 
-    def __init__(self, id: int, name: str, date: date, answers: dict):
+    def __init__(self, id: int, name: str, date: date, answers: list):
         self.id = id
         self.name = name
         self.date = date
         self.answers = answers
         self.sum_answers = self._get_sum(answers)
 
-    def _get_sum(self, answers: dict) -> int:
-        answerCounts = list(answers.values())
-        return sum(answerCounts)
+    def _get_sum(self, answers: list) -> int:
+        return sum(answer.count for answer in answers)
 
     def is_tomorrow(self) -> bool:
         return self.date == (datetime.now()+timedelta(1)).date()
@@ -155,7 +158,7 @@ class News:
         message = message + ".\r\n" + "Bisher " + str(self.sum_answers) + " Rückmeldungen:\r\n"
 
 
-        for answer_key in self.answers:
-            message = message + answer_key + ": " + str(self.answers[answer_key]) + "\r\n"
+        for answer in self.answers:
+            message = message + answer.name + ": " + str(answer.count) + "\r\n"
 
         return message
