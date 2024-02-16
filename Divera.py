@@ -152,6 +152,9 @@ class News:
     def is_tomorrow(self) -> bool:
         return self.date == (datetime.now()+timedelta(1)).date()
 
+    def is_in_three_days(self) -> bool:
+        return self.date == (datetime.now()+timedelta(3)).date()
+
     def format(self) -> str:
         message = "Nächster Dienst: " + self.name
 

@@ -66,3 +66,20 @@ class test_News(unittest.TestCase):
         actual = dut.is_tomorrow()
 
         self.assertTrue(actual)
+
+
+    def test_is_in_three_days_date_is_today_returns_false(self):
+        today = datetime.now().date()
+        dut = News(0, "", today, 0, [])
+
+        actual = dut.is_in_three_days()
+
+        self.assertFalse(actual)
+
+    def test_is_in_three_days_date_is_in_three_days_returns_true(self):
+        in_three_days = (datetime.now() + timedelta(3)).date()
+        dut = News(0, "", in_three_days, 0, [])
+
+        actual = dut.is_in_three_days()
+
+        self.assertTrue(actual)
