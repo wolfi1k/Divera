@@ -92,13 +92,14 @@ class DiveraMessageConverter:
                 continue
             dateAndTitle = newsResult["title"]
             id = newsResult["id"]
+            recipients = newsResult["count_recipients"]
             date = self._answer_title_to_date(dateAndTitle)
             if date is None:
                 title = dateAndTitle
             else:
                 title = self._split_date_and_title(dateAndTitle)[1]
             answers = self._divera_answers_to_dict(newsResult["surveys"][0])
-            current = News(id, title, date, answers)
+            current = News(id, title, date, recipients, answers)
             result.append(current)
         return result
 
@@ -133,13 +134,15 @@ class News:
     id = -1
     name = ""
     date = None
+    recipients: int
     answers = { }
     sum_answers = 0
 
-    def __init__(self, id: int, name: str, date: date, answers: list):
+    def __init__(self, id: int, name: str, date: date, recipients: int, answers: list):
         self.id = id
         self.name = name
         self.date = date
+        self.recipients = recipients
         self.answers = answers
         self.sum_answers = self._get_sum(answers)
 
@@ -155,7 +158,7 @@ class News:
         if self.date is not None:
             message = message + " am " + str(self.date.strftime("%d.%m.%Y"))
 
-        message = message + ".\r\n" + "Bisher " + str(self.sum_answers) + " Rückmeldungen:\r\n"
+        message = message + ".\r\n" + "Bisher " + str(self.sum_answers) + " von " + str(self.recipients) + " Rückmeldungen:\r\n"
 
 
         for answer in self.answers:

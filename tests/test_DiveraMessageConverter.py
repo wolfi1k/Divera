@@ -13,16 +13,19 @@ class test_DiveraMessageConverter(unittest.TestCase):
         expected_first_id = 123
         expected_first_name = "Neue Dienstanweisung"
         expected_first_date = None
+        expected_first_recipients = 0
         expected_first_answers = [ ]
         expected_first_number_of_answers = 0
         expected_second_id = 123
         expected_second_name = "Neue Dienstanweisung"
         expected_second_date = date(2095, 6, 3)
+        expected_second_recipients = 0
         expected_second_answers = [ ]
         expected_second_number_of_answers = 0
         expected_third_id = 123
         expected_third_name = "Neue Dienstanweisung"
         expected_third_date = date(2020, 7, 23)
+        expected_third_recipients = 0
         expected_third_answers = [ ]
         expected_third_number_of_answers = 0
 
@@ -33,17 +36,20 @@ class test_DiveraMessageConverter(unittest.TestCase):
         self.assertEqual(actual_first.id, expected_first_id)
         self.assertEqual(actual_first.name, expected_first_name)
         self.assertEqual(actual_first.date, expected_first_date)
+        self.assertEqual(actual_first.recipients, expected_first_recipients)
         self.assertEqual(actual_first.answers, expected_first_answers)
         self.assertEqual(actual_first.sum_answers, expected_first_number_of_answers)
         actual_second = actual[1]
         self.assertEqual(actual_second.id, expected_second_id)
         self.assertEqual(actual_second.name, expected_second_name)
         self.assertEqual(actual_second.date, expected_second_date)
+        self.assertEqual(actual_second.recipients, expected_second_recipients)
         self.assertEqual(actual_second.answers, expected_second_answers)
         self.assertEqual(actual_second.sum_answers, expected_second_number_of_answers)
         actual_third = actual[2]
         self.assertEqual(actual_third.id, expected_third_id)
         self.assertEqual(actual_third.name, expected_third_name)
         self.assertEqual(actual_third.date, expected_third_date)
+        self.assertEqual(actual_third.recipients, expected_third_recipients)
         self.assertEqual(actual_third.answers, expected_third_answers)
         self.assertEqual(actual_third.sum_answers, expected_third_number_of_answers)
