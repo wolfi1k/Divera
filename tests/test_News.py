@@ -30,7 +30,7 @@ class test_News(unittest.TestCase):
         answers = [ Answer(0,  "FirstAnswer", 5), Answer(31, "SecondAnswer", 10) ]
         number_of_answers = 15
         dut = News(id, name, date, recipients, answers)
-        expected = "Nächster Dienst: TestName am 15.02.2024.\r\nBisher 15 von 20 Rückmeldungen:\r\nFirstAnswer: 5\r\nSecondAnswer: 10\r\n"
+        expected = "Nächster Dienst: TestName am 15.02.2024.\r\nBisher 15 von 20 Rückmeldungen:\r\nFirstAnswer: 5\r\nSecondAnswer: 10\r\nBitte meldet euch zurück."
 
         actual = dut.format()
 
@@ -44,7 +44,7 @@ class test_News(unittest.TestCase):
         answers = [ Answer(id=0,  name="FirstAnswer", count=5), Answer(id=31, name="SecondAnswer", count=10) ]
         number_of_answers = 15
         dut = News(id, name, date, recipients, answers)
-        expected = "Nächster Dienst: TestName.\r\nBisher 15 von 20 Rückmeldungen:\r\nFirstAnswer: 5\r\nSecondAnswer: 10\r\n"
+        expected = "Nächster Dienst: TestName.\r\nBisher 15 von 20 Rückmeldungen:\r\nFirstAnswer: 5\r\nSecondAnswer: 10\r\nBitte meldet euch zurück."
 
         actual = dut.format()
 

@@ -164,4 +164,6 @@ class News:
         for answer in self.answers:
             message = message + answer.name + ": " + str(answer.count) + "\r\n"
 
+        message = message + "Bitte meldet euch zurück."
+
         return message
