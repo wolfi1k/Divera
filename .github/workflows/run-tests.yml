@@ -2,14 +2,13 @@ name: Run tests
 
 on:
   push:
-    run_name: On push
   pull_request:
-    run_name: On pull request
     branches:
     - main
 
 jobs:
   build:
+    run_name: Run tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
