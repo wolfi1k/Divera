@@ -108,7 +108,8 @@ class DiveraMessageConverter:
         answers = list(diveraAnswers["answers"].values())
 
         for answer in answers:
-            result.append(Answer(id=answer["id"], name=answer["title"], count=answer["answeredcount"]))
+            if not "custom_answers" in answer:
+                result.append(Answer(id=answer["id"], name=answer["title"], count=answer["answeredcount"]))
         return result
 
     def _answer_title_to_date(self, title: str) -> date:

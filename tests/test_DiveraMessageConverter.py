@@ -2,6 +2,7 @@ import unittest
 import json
 from datetime import date, datetime
 from Divera import News
+from Divera import Answer
 from Divera import DiveraMessageConverter
 
 class test_DiveraMessageConverter(unittest.TestCase):
@@ -53,3 +54,34 @@ class test_DiveraMessageConverter(unittest.TestCase):
         self.assertEqual(actual_third.recipients, expected_third_recipients)
         self.assertEqual(actual_third.answers, expected_third_answers)
         self.assertEqual(actual_third.sum_answers, expected_third_number_of_answers)
+
+    def test__divera_answers_to_dict_includes_custom_answer_ignores_custom_answer(self):
+        input = '{"id":84004,"title":"Rückmeldung","show_result_count":2,"show_result_names":2,"multiple_answers":true,"custom_answers":true,"answers":{"0":{"id":0,"title":"Freitext","note":"","answeredlist":[],"answeredcount":[],"custom_answers":[{"id":123456,"note":"1 Erwachsener, 2 Kinder, davon 0 Vegetarier","ts":1719848211},{"id":2345678,"note":"2 Erwachsene 2 Kinder wie bringen für die Kinder Würstchen mit","ts":1719848494},{"id":987654,"note":"2 Erwachsene, keine Veggies","ts":1719848514},{"id":1000000,"note":"Gesamt 2 davon 1x Veggi","ts":1719850758},{"id":1000000,"note":"2 Erwachsene, 2 Kinder, 2 davon Vegetarier","ts":1719853383},{"id":100000,"note":"Plus 1 ","ts":1719857088},{"id":1000000,"note":"2 Erwachsene","ts":1720076435},{"id":10000,"note":"2 Personen, 0 Veggy","ts":1720199248}]},"212230":{"id":212230,"title":"Komme","checked":true,"answeredlist":[],"answeredcount":21},"216747":{"id":216747,"title":"Nehme nicht teil","checked":false,"answeredlist":[123456,7654321],"answeredcount":2} },"answerSorting":[111111,222222],"response_until":false,"ts_response":0,"access_count":true,"access_names":true}'
+        expected_number_of_answers = 2
+        input_json = json.loads(input)
+
+        actual = DiveraMessageConverter()._divera_answers_to_dict(input_json)
+
+        self.assertEqual(len(actual), expected_number_of_answers)
+
+    def test_divera_news_response_to_news_has_custom_answers_ignores_custom_answers(self):
+        input = '{"items":{"first":{"id":111111,"author_id":111111,"cluster_id":111111,"message_channel_id":0,"foreign_id":"","title":"2024/07/20 (Sa) Familiensommerfest 16-20 Uhr","text":"Familiensommerfest","archive":false,"date":1704063600,"ts_archive":0,"new":false,"editable":true,"answerable":true,"notification_type":2,"group":[],"cluster":[],"user_cluster_relation":[],"hidden":false,"deleted":false,"message_channel":false,"attachment_count":0,"count_recipients":50,"count_read":40,"survey":true,"ucr_addressed":[],"ucr_read":[],"ucr_self_addressed":true,"private_mode":false,"surveys":[{"id":111111,"title":"Rückmeldung","show_result_count":2,"show_result_names":2,"multiple_answers":true,"custom_answers":true,"answers":{"0":{"id":0,"title":"Freitext","note":"","answeredlist":[],"answeredcount":[],"custom_answers":[{"id":111111,"note":"1 Erwachsener, 2 Kinder, davon 0 Vegetarier","ts":1719848211},{"id":111111,"note":"2 Erwachsene 2 Kinder wie bringen für die Kinder Würstchen mit","ts":1719848494},{"id":111111,"note":"2 Erwachsene, keine Veggies","ts":1719848514},{"id":111111,"note":"Gesamt 2 davon 1x Veggi","ts":1719850758},{"id":111111,"note":"2 Erwachsene, 2 Kinder, 2 davon Vegetarier","ts":1719853383},{"id":111111,"note":"Plus 1 ","ts":1719857088},{"id":111111,"note":"2 Erwachsene","ts":1720076435},{"id":111111,"note":"2 Personen, 0 Veggy","ts":1720199248}]},"111111":{"id":111111,"title":"Komme","checked":true,"answeredlist":[],"answeredcount":21},"222222":{"id":222222,"title":"Nehme nicht teil","checked":false,"answeredlist":[],"answeredcount":12} },"answerSorting":[111111,222222],"response_until":false,"ts_response":0,"access_count":true,"access_names":true}],"ts_publish":1704063600,"ts_create":1702981656,"ts_update":1720349336,"send_mail":false,"send_push":false,"send_sms":false,"send_call":false,"send_pager":false} } }'
+        input_json = json.loads(input)
+        expected_number_of_news = 1
+        expected_first_id = 111111
+        expected_first_name = "(Sa) Familiensommerfest 16-20 Uhr"
+        expected_first_date = date(2024, 7, 20)
+        expected_first_recipients = 50
+        expected_first_answers = [ Answer(id= 111111, name='Komme', count=21),  Answer(id=222222, name='Nehme nicht teil', count=12) ]
+        expected_first_number_of_answers = 33
+
+        actual = DiveraMessageConverter().divera_news_response_to_news(input_json)
+        print(actual)
+        self.assertEqual(len(actual), expected_number_of_news)
+        actual_first = actual[0]
+        self.assertEqual(actual_first.id, expected_first_id)
+        self.assertEqual(actual_first.name, expected_first_name)
+        self.assertEqual(actual_first.date, expected_first_date)
+        self.assertEqual(actual_first.recipients, expected_first_recipients)
+        self.assertEqual(actual_first.answers, expected_first_answers)
+        self.assertEqual(actual_first.sum_answers, expected_first_number_of_answers)
